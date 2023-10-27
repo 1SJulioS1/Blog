@@ -1,0 +1,16 @@
+venv
+venv
+db.sqlite3
+
+*.pyc
+accounts/__pycache__/
+blog/__pycache__/
+accounts/migrations/__pycache__/
+__pycache__/
+blog/accounts/__init__.py
+
+*.sqlite3
+
+backend/accounts/migrations/__init__.py
+backend/accounts/__init__.py
+backend/backend/__init__.py
