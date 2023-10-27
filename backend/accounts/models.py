@@ -6,7 +6,7 @@ from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser
 
 
-phone_regex = r'[+535]\d{10}$'
+phone_regex = r'"^\\+?[1-9][0-9]{7,14}$"'
 phone_validator = RegexValidator(
     regex=phone_regex,
     message="Phone number must be in this format: '+country_code-area_number-telephone_number'."
@@ -27,7 +27,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
 
     user_type = models.CharField(
-        max_length=20, choices=USER_TYPE_CHOICES, default='regular_user')
+        max_length=20, choices=USER_TYPE_CHOICES, default='suscriber')
 
     phone = models.CharField(
         max_length=20,
@@ -35,7 +35,7 @@ class CustomUser(AbstractUser):
     )
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'user_type']
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return str(self.username)
