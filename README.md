@@ -56,6 +56,8 @@ const app = express();
 
 ```javascript
 const { MongoClient } = require("mongodb");
+require("dotenv").config();
+
 const client = new MongoClient(process.env.DATABASE_URI);
 
 const connectDB = async () => {
@@ -69,3 +71,5 @@ const connectDB = async () => {
 
 module.exports = connectDB;
 ```
+
+- import the created module into `server.js` file
