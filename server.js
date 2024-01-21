@@ -5,6 +5,9 @@ const credentials = require("./middleware/credentials");
 const corsOptions = require("./config/corsOptions");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/dbConn.js").connectToDatabase;
+const verifyJWT = require("./middleware/verifyJWT");
+
+PORT = process.env.PORT || 3500;
 
 connectDB();
 app.use(credentials);
@@ -16,8 +19,9 @@ app.use(cookieParser());
 app.use("/auth", require("./routes/auth"));
 app.use("/refresh", require("./routes/refresh.js"));
 app.use("/logout", require("./routes/logout.js"));
-app.use("/group", require("./routes/initialAdmin"));
+app.use("/initialAdmin", require("./routes/initialAdmin"));
 
-PORT = process.env.PORT || 3500;
+app.use(verifyJWT);
+app.use("/group/admin", require("./routes/admin.js"));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
