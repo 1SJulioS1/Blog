@@ -12,7 +12,6 @@ const initialAdmin = async (req, res) => {
       .json({ message: "Username and password must be provided" });
   }
   const duplicate = await collection.findOne({ email });
-  console.log(duplicate);
   if (duplicate) {
     return res.status(401).json({ message: "Duplicated user" });
   }
@@ -21,14 +20,15 @@ const initialAdmin = async (req, res) => {
   try {
     const result = await db.collection("User").insertOne({
       username,
-      role: 5150,
+      role: [5150],
       password: hashedPwd,
       email,
     });
-    console.log(`User ${username} created successfully`);
-    return;
+    return res.status(201).json({ message: "User created successfully" });
   } catch (error) {
-    console.log(`Error creating seed admin user: ${error}`);
+    return res
+      .status(500)
+      .json({ message: `Error creating seed admin user: ${error}` });
   }
 };
 
