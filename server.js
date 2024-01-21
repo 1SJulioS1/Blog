@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const credentials = require("./middleware/credentials");
-const errorHandler = require("./middleware/errorHandler");
 const corsOptions = require("./config/corsOptions");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/dbConn.js").connectToDatabase;
@@ -15,8 +14,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/group", require("./routes/initialAdmin"));
-
-app.use(errorHandler);
 
 PORT = process.env.PORT || 3500;
 
