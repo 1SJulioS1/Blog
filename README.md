@@ -92,22 +92,34 @@ const app = express();
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
 
-const client = new MongoClient(process.env.DATABASE_URI);
+const connectionString = process.env.DATABASE_URI || "";
 
-const connectDB = async () => {
+let _db;
+
+const client = new MongoClient(connectionString);
+
+const connectToDatabase = async () => {
+  if (_db) {
+    return _db;
+  }
+
   try {
     await client.connect();
-    console.log("Connected to MongoDB Atlas!");
-  } catch (error) {
-    console.error(error);
+    _db = client.db("Blog");
+    console.log("MongoDB connection established");
+  } catch (e) {
+    console.error(e);
+    throw e;
   }
+
+  return _db;
 };
 
-module.exports = connectDB;
+module.exports = { connectToDatabase };
 ```
 
 - import the created module into `server.js` file
-- invoke the `connectDB` function in `server.js`
+- invoke the `connectToDB` function in `server.js`
 
 ## Step 10. Create `logEvents` logger function in `middleware` folder using this code:
 
