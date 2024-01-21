@@ -121,44 +121,7 @@ module.exports = { connectToDatabase };
 - import the created module into `server.js` file
 - invoke the `connectToDB` function in `server.js`
 
-## Step 10. Create `logEvents` logger function in `middleware` folder using this code:
-
-```javascript
-const { format } = require("date-fns");
-const { v4: uuid } = require("uuid");
-const fs = require("fs");
-const path = require("path");
-const fsPromises = require("fs").promises;
-
-const logEvents = async (message, logName) => {
-  const dateTime = `${format(new Date(), "yyyMMdd\tHH:mm:ss")}`;
-  const logItem = `${dateTime}\t${uuid()}\t${message}\n`;
-  console.log(logItem);
-  try {
-    if (!fs.existsSync(path.join(__dirname, "..", "logs"))) {
-      await fsPromises.mkdir(path.join(__dirname, "..", "logs"));
-    }
-    await fsPromises.appendFile(
-      path.join(__dirname, "..", "logs", logName),
-      logItem
-    );
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const logger = (req, res, next) => {
-  logEvents(`${req.method}\t${req.headers.origin}\t${req.url}`, "reqLog.txt");
-  console.log(`${req.method} ${req.path}`);
-  next();
-};
-
-module.exports = { logger, logEvents };
-```
-
-Invoke `logEvents` middleware in `server.js` after `connectDB` function is called (Optional)
-
-## Step 11 Setting up Cross Origin Resource Sharing
+## Step 10 Setting up Cross Origin Resource Sharing
 
 1. Create `whitelist.js` whitelist domains for this API in `config` folder, with a content similar to this:
 
@@ -222,7 +185,7 @@ const corsOptions = require("./config/corsOptions");
 app.use(cors(corsOptions));
 ```
 
-## Step 12 Configuring Middleware for Parsing JSON and URL-Encoded Data
+## Step 11 Configuring Middleware for Parsing JSON and URL-Encoded Data
 
 1. Use urlencoded middleware :
 
@@ -246,7 +209,7 @@ This means that when your Express application receives an HTTP request, this lin
 app.use(express.json());
 ```
 
-## Step 13 Cookies
+## Step 12 Cookies
 
 Using cookie-parser package middleware to handle cookies
 Add this line to `server.js`
@@ -254,12 +217,4 @@ Add this line to `server.js`
 ```javascript
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
-```
-
-## Step 14 Error Handling
-
-Add error handling middleware to `server.js`, using this line at the end of the file
-
-```javascript
-app.use(errorHandler);
 ```
