@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/auth", require("./routes/auth"));
+app.use("/refresh", require("./routes/refresh.js"));
 app.use("/group", require("./routes/initialAdmin"));
 
 PORT = process.env.PORT || 3500;
