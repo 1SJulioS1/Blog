@@ -31,4 +31,14 @@ const createEditor = async (req, res) => {
   }
 };
 
-module.exports = { createEditor };
+const getEditors = async (req, res) => {
+  const db = await connectToDatabase();
+  const collection = db.collection("User");
+  const editor = await collection
+    .find({ role: 1984 }, { projection: { _id: 0, username: 1, email: 1 } })
+    .toArray();
+  if (!editor) return res.status(404).json({ message: "No editors found" });
+  res.json(editor);
+};
+
+module.exports = { createEditor, getEditors };

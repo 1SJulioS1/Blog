@@ -5,11 +5,11 @@ const bcrypt = require("bcrypt");
 const getAllAdmins = async (req, res) => {
   const db = await connectToDatabase();
   const collection = db.collection("User");
-  const employees = await collection
+  const admin = await collection
     .find({ role: 5150 }, { projection: { _id: 0, username: 1, email: 1 } })
     .toArray();
-  if (!employees) return res.status(404).json({ message: "No employee found" });
-  res.json(employees);
+  if (!admin) return res.status(404).json({ message: "No admins found" });
+  res.json(admin);
 };
 
 const getAdmin = async (req, res) => {
