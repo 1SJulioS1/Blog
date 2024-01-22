@@ -34,7 +34,6 @@ const getAdmin = async (req, res) => {
 const getAdminId = async (req, res) => {
   const db = await connectToDatabase();
   const collection = db.collection("User");
-  console.log(req.body.email);
   if (!req?.body?.email) {
     return res.status(400).json({ message: "Email is required" });
   }
