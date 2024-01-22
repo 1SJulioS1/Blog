@@ -6,9 +6,13 @@ const {
   getAllAdmins,
   getAdmin,
   getAdminId,
+  createAdmin,
 } = require("../controllers/admin/adminController");
 
-router.route("/").get(verifyRoles(ROLES_LIST.Admin), getAllAdmins);
+router
+  .route("/")
+  .get(verifyRoles(ROLES_LIST.Admin), getAllAdmins)
+  .post(verifyRoles(ROLES_LIST.Admin), createAdmin);
 router.route("/id").post(verifyRoles(ROLES_LIST.Admin), getAdminId);
 router.route("/:id").get(verifyRoles(ROLES_LIST.Admin), getAdmin);
 
