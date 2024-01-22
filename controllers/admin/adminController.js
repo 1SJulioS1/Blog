@@ -13,6 +13,7 @@ const getAllAdmins = async (req, res) => {
 const getAdmin = async (req, res) => {
   const db = await connectToDatabase();
   const collection = db.collection("User");
+
   if (!req?.params?.id) {
     return res.status(400).json({ message: "Id parameter is required" });
   }
@@ -30,4 +31,23 @@ const getAdmin = async (req, res) => {
   res.json(admin);
 };
 
-module.exports = { getAllAdmins, getAdmin };
+const getAdminId = async (req, res) => {
+  const db = await connectToDatabase();
+  const collection = db.collection("User");
+  console.log(req.body.email);
+  if (!req?.body?.email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+  console.log(req.body.email);
+  const admin = await collection
+    .find({ email: req.body.email }, { projection: { _id: 1 } })
+    .toArray();
+  if (!admin) {
+    return res
+      .status(400)
+      .json({ message: `Admin with email ${req.body.email} not found` });
+  }
+  return res.json(admin);
+};
+
+module.exports = { getAllAdmins, getAdmin, getAdminId };

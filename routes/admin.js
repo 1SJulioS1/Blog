@@ -5,8 +5,11 @@ const verifyRoles = require("../middleware/verifyRoles");
 const {
   getAllAdmins,
   getAdmin,
+  getAdminId,
 } = require("../controllers/admin/adminController");
 
 router.route("/").get(verifyRoles(ROLES_LIST.Admin), getAllAdmins);
+router.route("/id").post(verifyRoles(ROLES_LIST.Admin), getAdminId);
 router.route("/:id").get(verifyRoles(ROLES_LIST.Admin), getAdmin);
+
 module.exports = router;
