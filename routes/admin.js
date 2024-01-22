@@ -8,6 +8,7 @@ const {
   getAdminId,
   createAdmin,
   updateAdmin,
+  partialUpdateAdmin,
 } = require("../controllers/admin/adminController");
 
 router
@@ -20,6 +21,7 @@ router.route("/id").post(verifyRoles(ROLES_LIST.Admin), getAdminId);
 router
   .route("/:id")
   .get(verifyRoles(ROLES_LIST.Admin), getAdmin)
-  .put(verifyRoles(ROLES_LIST.Admin), updateAdmin);
+  .put(verifyRoles(ROLES_LIST.Admin), updateAdmin)
+  .patch(verifyRoles(ROLES_LIST.Admin), partialUpdateAdmin);
 
 module.exports = router;
