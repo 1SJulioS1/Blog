@@ -23,5 +23,6 @@ app.use("/initialAdmin", require("./routes/initialAdmin"));
 
 app.use(verifyJWT);
 app.use("/group/admin", require("./routes/admin.js"));
+app.use("/group/editor", require("./routes/editor.js"));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
