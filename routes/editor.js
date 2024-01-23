@@ -7,6 +7,7 @@ const {
   createEditor,
   getEditors,
   getEditor,
+  updateEditor,
 } = require("../controllers/editor/editorController");
 
 router
@@ -14,6 +15,9 @@ router
   .post(verifyRoles(ROLES_LIST.Admin), createEditor)
   .get(verifyRoles(ROLES_LIST.Admin), getEditors);
 
-router.route("/:id").get(verifySelfOrAdministrator, getEditor);
+router
+  .route("/:id")
+  .get(verifySelfOrAdministrator, getEditor)
+  .put(verifySelfOrAdministrator, updateEditor);
 
 module.exports = router;

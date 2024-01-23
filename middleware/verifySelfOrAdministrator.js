@@ -5,13 +5,14 @@ const verifySelfOrAdministrator = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
-  if (!token) return res.sendStatus(403).json({ message: "No token provided" });
+  if (!token)
+    return res.status(403).json({ message: "No token provided" }).end();
 
   jwt.verify(
     token,
     process.env.ACCESS_TOKEN_SECRET,
     async (err, decodedToken) => {
-      if (err) return res.sendStatus(403).json({ message: "Invalid token" });
+      if (err) return res.status(403).json({ message: "Invalid token" }).end();
 
       const db = await connectToDatabase();
       const collection = db.collection("User");
@@ -24,9 +25,11 @@ const verifySelfOrAdministrator = (req, res, next) => {
         !req.roles.includes(5150) &&
         result._id.toString() !== req.params.id
       ) {
+        console.log();
         return res
-          .sendStatus(401)
-          .json({ message: "You don't have the necessary permissions " });
+          .status(401)
+          .json({ message: "You don't have the necessary permissions " })
+          .end();
       }
       next();
     }
