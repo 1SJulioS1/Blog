@@ -1,20 +1,36 @@
+const jwt = require("jsonwebtoken");
+const { connectToDatabase } = require("../config/dbConn.js");
+
 const verifySelfOrAdministrator = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) return res.sendStatus(403).json({ message: "No token provided" });
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403).json({ message: "Invalid token" });
+  jwt.verify(
+    token,
+    process.env.ACCESS_TOKEN_SECRET,
+    async (err, decodedToken) => {
+      if (err) return res.sendStatus(403).json({ message: "Invalid token" });
 
-    req.role = user.UserInfo.role;
+      const db = await connectToDatabase();
+      const collection = db.collection("User");
 
-    if (req.role !== 5150 && req.params.id !== req.userId) {
-      return res
-        .sendStatus(401)
-        .json({ message: "You don't have the necessary permissions " });
+      const result = await collection.findOne({
+        email: decodedToken.UserInfo.email,
+      });
+
+      if (
+        !req.roles.includes(5150) &&
+        result._id.toString() !== req.params.id
+      ) {
+        return res
+          .sendStatus(401)
+          .json({ message: "You don't have the necessary permissions " });
+      }
+      next();
     }
-
-    next();
-  });
+  );
 };
+
+module.exports = verifySelfOrAdministrator;

@@ -1,4 +1,5 @@
 const { connectToDatabase } = require("../../config/dbConn.js");
+const { ObjectId } = require("mongodb");
 const bcrypt = require("bcrypt");
 
 const createEditor = async (req, res) => {
@@ -41,4 +42,24 @@ const getEditors = async (req, res) => {
   res.json(editor);
 };
 
-module.exports = { createEditor, getEditors };
+const getEditor = async (req, res) => {
+  const db = await connectToDatabase();
+  const collection = db.collection("User");
+  if (!req?.params?.id) {
+    return res.status(400).json({ message: "Id parameter is required" });
+  }
+  const editor = await collection
+    .find(
+      { _id: new ObjectId(req.params.id) },
+      { projection: { _id: 0, username: 1, email: 1 } }
+    )
+    .toArray();
+
+  if (!editor) {
+    return res
+      .status(400)
+      .json({ message: `No editor with ${req.params.id} found` });
+  }
+  res.json(editor);
+};
+module.exports = { createEditor, getEditors, getEditor };
