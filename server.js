@@ -20,6 +20,7 @@ app.use("/auth", require("./routes/auth"));
 app.use("/refresh", require("./routes/refresh.js"));
 app.use("/logout", require("./routes/logout.js"));
 app.use("/initialAdmin", require("./routes/initialAdmin"));
+app.use("/group/reader/", require("./routes/reader.js"));
 
 app.use(verifyJWT);
 app.use("/group/admin", require("./routes/admin.js"));
