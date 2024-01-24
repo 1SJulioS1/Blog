@@ -2,26 +2,20 @@ const express = require("express");
 const router = express.Router();
 const ROLES_LIST = require("../config/roles_list");
 const verifyRoles = require("../middleware/verifyRoles");
+const { getAllAdmins } = require("../controllers/admin/adminController");
 const {
-  getAllAdmins,
-  getAdmin,
-  getAdminId,
-  createAdmin,
-  updateAdmin,
-  partialUpdateAdmin,
-} = require("../controllers/admin/adminController");
-
+  createUser,
+  getUser,
+  updateUser,
+} = require("../controllers/user/userController");
 router
   .route("/")
   .get(verifyRoles(ROLES_LIST.Admin), getAllAdmins)
-  .post(verifyRoles(ROLES_LIST.Admin), createAdmin);
-
-router.route("/id").post(verifyRoles(ROLES_LIST.Admin), getAdminId);
+  .post(verifyRoles(ROLES_LIST.Admin), createUser);
 
 router
   .route("/:id")
-  .get(verifyRoles(ROLES_LIST.Admin), getAdmin)
-  .put(verifyRoles(ROLES_LIST.Admin), updateAdmin)
-  .patch(verifyRoles(ROLES_LIST.Admin), partialUpdateAdmin);
+  .get(verifyRoles(ROLES_LIST.Admin), getUser)
+  .put(verifyRoles(ROLES_LIST.Admin), updateUser);
 
 module.exports = router;

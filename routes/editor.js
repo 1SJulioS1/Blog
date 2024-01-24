@@ -5,24 +5,16 @@ const verifyRoles = require("../middleware/verifyRoles");
 const verifySelfOrAdministrator = require("../middleware/verifySelfOrAdministrator");
 const verifyAdministrator = require("../middleware/verifySelfOrAdministrator");
 const {
-  createEditor,
-  getEditors,
-  getEditor,
-  updateEditor,
-  removeEditor,
-  partialUpdateEditor,
-} = require("../controllers/editor/editorController");
+  createUser,
+  getUser,
+  updateUser,
+} = require("../controllers/user/userController");
 
-router
-  .route("/")
-  .post(verifyRoles(ROLES_LIST.Admin), createEditor)
-  .get(verifyRoles(ROLES_LIST.Admin), getEditors);
+router.route("/").post(verifyRoles(ROLES_LIST.Admin), createUser);
 
 router
   .route("/:id")
-  .get(verifySelfOrAdministrator, getEditor)
-  .put(verifySelfOrAdministrator, updateEditor)
-  .delete(verifyAdministrator, removeEditor)
-  .patch(verifySelfOrAdministrator, partialUpdateEditor);
+  .get(verifySelfOrAdministrator, getUser)
+  .put(verifySelfOrAdministrator, updateUser);
 
 module.exports = router;

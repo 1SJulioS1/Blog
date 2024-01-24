@@ -32,25 +32,12 @@ const createEditor = async (req, res) => {
       .json({ message: `Error creating seed admin user: ${error}` });
   }
 };
-const getEditors = async (req, res) => {
-  try {
-    const db = await connectToDatabase();
-    const collection = db.collection("User");
-    const editor = await collection
-      .find({ role: 1984 }, { projection: { _id: 0, username: 1, email: 1 } })
-      .toArray();
-    if (!editor) return res.status(404).json({ message: "No editors found" });
-    res.json(editor);
-  } catch (error) {
-    console.error("Error occurred:", error);
-    return res.status(500).json({ message: "An error occurred." });
-  }
-};
 
 const getEditor = async (req, res) => {
   try {
     const db = await connectToDatabase();
     const collection = db.collection("User");
+
     if (!req?.params?.id) {
       return res.status(400).json({ message: "Id parameter is required" });
     }
@@ -72,7 +59,6 @@ const getEditor = async (req, res) => {
     return res.status(500).json({ message: "An error occurred." });
   }
 };
-
 const updateEditor = async (req, res) => {
   try {
     const db = await connectToDatabase();
@@ -102,6 +88,20 @@ const updateEditor = async (req, res) => {
     return res
       .status(500)
       .json({ message: "An error occurred while updating the user" });
+  }
+};
+const getEditors = async (req, res) => {
+  try {
+    const db = await connectToDatabase();
+    const collection = db.collection("User");
+    const editor = await collection
+      .find({ role: 1984 }, { projection: { _id: 0, username: 1, email: 1 } })
+      .toArray();
+    if (!editor) return res.status(404).json({ message: "No editors found" });
+    res.json(editor);
+  } catch (error) {
+    console.error("Error occurred:", error);
+    return res.status(500).json({ message: "An error occurred." });
   }
 };
 

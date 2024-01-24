@@ -58,6 +58,41 @@ const getReader = async (req, res) => {
     return res.status(500).json({ message: "An error occurred." });
   }
 };
+
+const updateReader = async (req, res) => {
+  try {
+    const db = await connectToDatabase();
+    const collection = db.collection("User");
+
+    if (!req?.params?.id) {
+      return res.status(400).json({ message: "Id parameter is required" });
+    }
+
+    const readerData = req.body;
+    if (readerData.password) {
+      const salt = await bcrypt.genSalt(10);
+      readerData.password = await bcrypt.hash(readerData.password, salt);
+    }
+    const result = await collection.updateOne(
+      { _id: new ObjectId(req.params.id) },
+      { $set: readerData }
+    );
+
+    if (result.matchedCount > 0 && result.modifiedCount === 0) {
+      res.status(400).json({ message: "Provide a different user data" });
+    }
+    if (result.modifiedCount > 0) {
+      res.status(200).json({ message: "User updated successfully" });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error occurred:", error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred while updating the user" });
+  }
+};
 const removeReader = async (req, res) => {
   try {
     const db = await connectToDatabase();
@@ -116,38 +151,4 @@ const partialUpdateReader = async (req, res) => {
   }
 };
 
-const updateReader = async (req, res) => {
-  try {
-    const db = await connectToDatabase();
-    const collection = db.collection("User");
-
-    if (!req?.params?.id) {
-      return res.status(400).json({ message: "Id parameter is required" });
-    }
-
-    const readerData = req.body;
-    if (readerData.password) {
-      const salt = await bcrypt.genSalt(10);
-      readerData.password = await bcrypt.hash(readerData.password, salt);
-    }
-    const result = await collection.updateOne(
-      { _id: new ObjectId(req.params.id) },
-      { $set: readerData }
-    );
-
-    if (result.matchedCount > 0 && result.modifiedCount === 0) {
-      res.status(400).json({ message: "Provide a different user data" });
-    }
-    if (result.modifiedCount > 0) {
-      res.status(200).json({ message: "User updated successfully" });
-    } else {
-      res.status(404).json({ message: "User not found" });
-    }
-  } catch (error) {
-    console.error("Error occurred:", error);
-    return res
-      .status(500)
-      .json({ message: "An error occurred while updating the user" });
-  }
-};
 module.exports = { createReader, getReader, removeReader, partialUpdateReader };

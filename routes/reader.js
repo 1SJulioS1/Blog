@@ -3,17 +3,18 @@ const router = express.Router();
 const verifySelfOrAdministrator = require("../middleware/verifySelfOrAdministrator");
 const verifyAdministrator = require("../middleware/verifySelfOrAdministrator");
 const {
-  createReader,
-  getReader,
-  removeReader,
-  partialUpdateReader,
-} = require("../controllers/reader/readerController");
-router.route("/").post(createReader);
+  createUser,
+  getUser,
+  updateUser,
+} = require("../controllers/user/userController");
+
+router.route("/").post(createUser);
 router
   .route("/:id")
-  .get(verifySelfOrAdministrator, getReader)
-  .delete(verifyAdministrator, removeReader)
+  .get(verifySelfOrAdministrator, getUser)
+  .put(verifySelfOrAdministrator, updateUser);
+/*  .delete(verifyAdministrator, removeReader)
   .patch(verifySelfOrAdministrator, partialUpdateReader)
-  .put(verifySelfOrAdministrator, partialUpdateReader);
+*/
 
 module.exports = router;
