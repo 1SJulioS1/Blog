@@ -13,8 +13,5 @@ router
   .route("/:id")
   .get(verifySelfOrAdministrator, getUser)
   .put(verifySelfOrAdministrator, updateUser);
-/*  .delete(verifyAdministrator, removeReader)
-  .patch(verifySelfOrAdministrator, partialUpdateReader)
-*/
 
 module.exports = router;
