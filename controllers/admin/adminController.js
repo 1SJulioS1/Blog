@@ -3,8 +3,6 @@ const { ObjectId } = require("mongodb");
 const bcrypt = require("bcrypt");
 
 const getAllUsersByRole = async (req, res) => {
-  console.log(`Role id: ${req.body.role}`);
-
   if (!req?.body?.role) {
     return res.status(400).json({ message: "User role is required" });
   }
@@ -26,6 +24,27 @@ const getAllUsersByRole = async (req, res) => {
   }
 };
 
+const removeUser = async (req, res) => {
+  try {
+    const db = await connectToDatabase();
+    const collection = db.collection("User");
+
+    if (!req?.params?.id) {
+      return res.status(400).json({ message: "Id parameter is required" });
+    }
+    const user = await collection.deleteOne({
+      _id: new ObjectId(req.params.id),
+    });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ message: "User deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   getAllUsersByRole,
+  removeUser,
 };

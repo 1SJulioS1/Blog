@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { getAllUsersByRole } = require("../controllers/admin/adminController");
+const {
+  getAllUsersByRole,
+  removeUser,
+} = require("../controllers/admin/adminController");
 const {
   createUser,
   getUser,
@@ -14,6 +17,7 @@ router.route("/users").get(verifyAdministrator, getAllUsersByRole);
 router
   .route("/:id")
   .get(verifyAdministrator, getUser)
-  .put(verifyAdministrator, updateUser);
+  .put(verifyAdministrator, updateUser)
+  .delete(verifyAdministrator, removeUser);
 
 module.exports = router;
