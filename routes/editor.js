@@ -10,6 +10,7 @@ const {
   getEditor,
   updateEditor,
   removeEditor,
+  partialUpdateEditor,
 } = require("../controllers/editor/editorController");
 
 router
@@ -21,6 +22,7 @@ router
   .route("/:id")
   .get(verifySelfOrAdministrator, getEditor)
   .put(verifySelfOrAdministrator, updateEditor)
-  .delete(verifyAdministrator, removeEditor);
+  .delete(verifyAdministrator, removeEditor)
+  .patch(verifySelfOrAdministrator, partialUpdateEditor);
 
 module.exports = router;
