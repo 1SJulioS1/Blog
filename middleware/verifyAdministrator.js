@@ -4,12 +4,10 @@ const verifyAdministrator = (req, res, next) => {
 
   if (!token) return res.sendStatus(403).json({ message: "No token provided" });
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedToken) => {
     if (err) return res.sendStatus(403).json({ message: "Invalid token" });
 
-    req.role = user.UserInfo.role;
-
-    if (req.role !== 5150) {
+    if (decodedToken.UserInfo.role !== 5150) {
       return res
         .sendStatus(401)
         .json({ message: "You don't have the necessary permissions " });

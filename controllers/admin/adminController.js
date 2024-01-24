@@ -2,15 +2,24 @@ const { connectToDatabase } = require("../../config/dbConn.js");
 const { ObjectId } = require("mongodb");
 const bcrypt = require("bcrypt");
 
-const getAllAdmins = async (req, res) => {
+const getAllUsersByRole = async (req, res) => {
+  console.log(`Role id: ${req.body.role}`);
+
+  if (!req?.body?.role) {
+    return res.status(400).json({ message: "User role is required" });
+  }
   try {
     const db = await connectToDatabase();
     const collection = db.collection("User");
-    const admin = await collection
-      .find({ role: 5150 }, { projection: { _id: 0, username: 1, email: 1 } })
+
+    const users = await collection
+      .find(
+        { role: req.body.role },
+        { projection: { _id: 0, username: 1, email: 1 } }
+      )
       .toArray();
-    if (!admin) return res.status(404).json({ message: "No admins found" });
-    res.json(admin);
+    if (!users) return res.status(404).json({ message: "No users found" });
+    res.json(users);
   } catch (error) {
     console.error("Error occurred:", error);
     return res.status(500).json({ message: "An error occurred." });
@@ -18,5 +27,5 @@ const getAllAdmins = async (req, res) => {
 };
 
 module.exports = {
-  getAllAdmins,
+  getAllUsersByRole,
 };
