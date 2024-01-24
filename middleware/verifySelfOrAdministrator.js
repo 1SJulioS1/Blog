@@ -24,7 +24,6 @@ const verifySelfOrAdministrator = (req, res, next) => {
           !decodedToken.UserInfo.role.includes(5150) &&
           result._id.toString() !== req.params.id
         ) {
-          console.log();
           return res
             .status(401)
             .json({ message: "You don't have the necessary permissions " })

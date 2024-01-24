@@ -90,7 +90,6 @@ const partialUpdateReader = async (req, res) => {
     if (!req?.params?.id) {
       return res.status(400).json({ message: "Id parameter is required" });
     }
-    console.log(req.params.id);
     const readerData = req.body;
 
     if (readerData.password) {
