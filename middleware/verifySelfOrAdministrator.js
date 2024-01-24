@@ -20,9 +20,8 @@ const verifySelfOrAdministrator = (req, res, next) => {
         const result = await collection.findOne({
           email: decodedToken.UserInfo.email,
         });
-
         if (
-          !req.roles.includes(5150) &&
+          !decodedToken.UserInfo.role.includes(5150) &&
           result._id.toString() !== req.params.id
         ) {
           console.log();

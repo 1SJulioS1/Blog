@@ -32,4 +32,31 @@ const createReader = async (req, res) => {
       .json({ message: `Error creating seed admin user: ${error}` });
   }
 };
-module.exports = { createReader };
+
+const getReader = async (req, res) => {
+  try {
+    const db = await connectToDatabase();
+    const collection = db.collection("User");
+
+    if (!req?.params?.id) {
+      return res.status(400).json({ message: "Id parameter is required" });
+    }
+    const reader = await collection
+      .find(
+        { _id: new ObjectId(req.params.id) },
+        { projection: { _id: 0, username: 1, email: 1 } }
+      )
+      .toArray();
+    if (!reader) {
+      return res
+        .status(400)
+        .json({ message: `Reader ID ${req.params.id} not found` });
+    }
+    res.json(reader);
+  } catch (error) {
+    console.error("Error occurred:", error);
+    return res.status(500).json({ message: "An error occurred." });
+  }
+};
+
+module.exports = { createReader, getReader };

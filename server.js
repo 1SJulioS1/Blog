@@ -25,5 +25,6 @@ app.use("/group/reader/", require("./routes/reader.js"));
 app.use(verifyJWT);
 app.use("/group/admin", require("./routes/admin.js"));
 app.use("/group/editor", require("./routes/editor.js"));
+app.use("/group/reader/info", require("./routes/editor.js"));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
