@@ -138,20 +138,20 @@ const partialUpdateEditor = async (req, res) => {
     if (!req?.params?.id) {
       return res.status(400).json({ message: "Id parameter is required" });
     }
-    const partialUpdateAdmin = req.body;
+    const editorData = req.body;
 
-    if (partialUpdateAdmin.password) {
+    if (editorData.password) {
       const salt = await bcrypt.genSalt(10);
-      partialUpdateAdmin.password = await bcrypt.hash(
-        partialUpdateAdmin.password,
-        salt
-      );
+      editorData.password = await bcrypt.hash(editorData.password, salt);
     }
     const result = await collection.updateOne(
       { _id: new ObjectId(req.params.id) },
-      { $set: partialUpdateAdmin }
+      { $set: editorData }
     );
 
+    if (result.matchedCount > 0 && result.modifiedCount === 0) {
+      res.status(400).json({ message: "Provide a different user data" });
+    }
     if (result.modifiedCount > 0) {
       res.status(200).json({ message: "User updated successfully" });
     } else {
@@ -164,6 +164,7 @@ const partialUpdateEditor = async (req, res) => {
       .json({ message: "An error occurred while updating the user" });
   }
 };
+
 module.exports = {
   createEditor,
   getEditors,

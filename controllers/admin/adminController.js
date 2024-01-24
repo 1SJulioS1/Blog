@@ -151,6 +151,9 @@ const partialUpdateAdmin = async (req, res) => {
       { $set: partialUpdateAdmin }
     );
 
+    if (result.matchedCount > 0 && result.modifiedCount === 0) {
+      res.status(400).json({ message: "Provide a different user data" });
+    }
     if (result.modifiedCount > 0) {
       res.status(200).json({ message: "User updated successfully" });
     } else {
