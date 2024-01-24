@@ -13,6 +13,7 @@ router
   .route("/:id")
   .get(verifySelfOrAdministrator, getReader)
   .delete(verifyAdministrator, removeReader)
-  .patch(verifySelfOrAdministrator, partialUpdateReader);
+  .patch(verifySelfOrAdministrator, partialUpdateReader)
+  .put(verifySelfOrAdministrator, partialUpdateReader);
 
 module.exports = router;
