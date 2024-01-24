@@ -3,11 +3,13 @@ const router = express.Router();
 const ROLES_LIST = require("../config/roles_list");
 const verifyRoles = require("../middleware/verifyRoles");
 const verifySelfOrAdministrator = require("../middleware/verifySelfOrAdministrator");
+const verifyAdministrator = require("../middleware/verifySelfOrAdministrator");
 const {
   createEditor,
   getEditors,
   getEditor,
   updateEditor,
+  removeEditor,
 } = require("../controllers/editor/editorController");
 
 router
@@ -18,6 +20,7 @@ router
 router
   .route("/:id")
   .get(verifySelfOrAdministrator, getEditor)
-  .put(verifySelfOrAdministrator, updateEditor);
+  .put(verifySelfOrAdministrator, updateEditor)
+  .delete(verifyAdministrator, removeEditor);
 
 module.exports = router;
